@@ -2,14 +2,372 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>TP Farming</title>
-    </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP Farming - Premium Agro</title>
+    <style>
+        :root { --primary: #0f172a; --accent: #00f2ff; --gold: #f59e0b; --card: rgba(30, 41, 59, 0.9); --white: #ffffff; --green: #22c55e; --red: #ef4444; }
+        
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), 
+                        url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: var(--white); 
+            overflow-x: hidden; 
+        }
+        
+        #auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .auth-card { background: rgba(30, 41, 59, 0.95); padding: 35px; border-radius: 30px; border: 1px solid var(--accent); width: 100%; max-width: 400px; text-align: center; backdrop-filter: blur(15px); box-shadow: 0 15px 50px rgba(0, 242, 255, 0.2); }
+        nav { background: rgba(30, 41, 59, 0.95); padding: 12px 5px; display: none; justify-content: space-around; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
+        .nav-link { color: var(--accent); font-weight: bold; cursor: pointer; font-size: 10px; text-transform: uppercase; text-align: center; }
+        .container { padding: 20px; max-width: 800px; margin: auto; }
+        .status-card { background: var(--card); border-radius: 25px; padding: 25px; text-align: center; border: 1px solid rgba(0,242,255,0.3); margin-bottom: 25px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .balance-text { font-size: 35px; color: var(--accent); font-weight: bold; margin: 10px 0; text-shadow: 0 0 10px rgba(0,242,255,0.5); }
+        .slot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .slot-card { background: var(--card); border-radius: 25px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); position: relative; backdrop-filter: blur(10px); }
+        .slot-img { width: 100%; height: 160px; border-radius: 20px; object-fit: cover; margin-bottom: 15px; }
+        .auth-tabs { display: flex; margin-bottom: 30px; background: rgba(0,0,0,0.4); border-radius: 15px; padding: 5px; }
+        .auth-tab { flex: 1; padding: 12px; cursor: pointer; border-radius: 12px; transition: 0.4s; font-weight: bold; color: #94a3b8; }
+        .auth-tab.active { background: var(--accent); color: #0f172a; }
+        input, select { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #334155; background: rgba(15, 23, 42, 0.8); color: white; box-sizing: border-box; outline: none; }
+        .btn { width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 16px; }
+        .btn-primary { background: var(--accent); color: #0f172a; box-shadow: 0 5px 15px rgba(0, 242, 255, 0.3); }
+        .history-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
+        .history-table th, .history-table td { border: 1px solid rgba(255,255,255,0.1); padding: 10px; text-align: center; }
+        .status-p { color: var(--gold); } .status-app { color: var(--green); }
+        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .admin-table { width: 100%; border-collapse: collapse; background: white; color: black; border-radius: 10px; overflow: hidden; margin-top: 10px; font-size: 13px;}
+        .admin-table th, .admin-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .admin-table th { background: #f2f2f2; }
+        .timer-box { background: rgba(0,0,0,0.4); padding: 8px; border-radius: 10px; margin-top: 8px; border: 1px solid rgba(0,242,255,0.2); }
+    </style>
+</head>
 <body>
-    <script>
-        // আপনার দেওয়া নির্দেশ অনুযায়ী ৩০০ টাকা থেকে স্লট এবং ১৫% ইনকাম সেট করা হয়েছে
-        const MIN_SLOT = 300; 
-        const DAILY_PROFIT = 0.15;
-        const REF_CODE = 'tpxvg';
-    </script>
+
+<a href="https://wa.me/8801339061938" class="whatsapp-float" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30">
+</a>
+
+<div id="auth-screen">
+    <div class="auth-card">
+        <h1 style="color:var(--accent); margin:0; letter-spacing: 2px;">TP FARMING</h1>
+        <p style="font-size: 12px; color: var(--gold); margin-bottom: 20px;">Premium Agro Investment</p>
+        <div class="auth-tabs">
+            <div id="tab-login" class="auth-tab active" onclick="showAuth('login')">লগইন</div>
+            <div id="tab-reg" class="auth-tab" onclick="showAuth('reg')">রেজিস্ট্রেশন</div>
+        </div>
+        <div id="login-fields">
+            <input type="number" id="l-phone" placeholder="ফোন নম্বর">
+            <input type="password" id="l-pass" placeholder="পাসওয়ার্ড">
+            <button class="btn btn-primary" onclick="processLogin()">লগইন করুন</button>
+        </div>
+        <div id="reg-fields" style="display:none;">
+            <input type="number" id="r-phone" placeholder="ফোন নম্বর">
+            <input type="password" id="r-pass" placeholder="নতুন পাসওয়ার্ড">
+            <input type="text" id="r-ref" placeholder="রেফার কোড (ঐচ্ছিক)">
+            <button class="btn btn-primary" onclick="processRegister()">অ্যাকাউন্ট খুলুন</button>
+        </div>
+    </div>
+</div>
+
+<nav id="top-nav">
+    <div class="nav-link" onclick="goTo('home')">🏠 হোম</div>
+    <div class="nav-link" onclick="goTo('slots')">🚜 স্লট</div>
+    <div class="nav-link" onclick="goTo('refer')">👥 রেফার</div>
+    <div class="nav-link" onclick="goTo('wallet')">💰 ওয়ালেট</div>
+    <div class="nav-link" onclick="adminLogin()">⚙️ এডমিন</div>
+    <div class="nav-link logout" onclick="processLogout()" style="color: var(--red);">🔴 লগআউট</div>
+</nav>
+
+<div id="app-main" style="display:none;" class="container">
+    <div id="view-home" class="view">
+        
+        <div style="background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid var(--gold);">
+            <marquee behavior="scroll" direction="left" style="color: var(--gold); font-size: 14px;">
+                🌾 TP Farming এ আপনাকে স্বাগতম! প্রতিটি স্লটে প্রতিদিন ১৫% প্রফিট এবং ৩০ দিন পর মূল টাকা ফেরত। নতুন মেম্বার জয়েন করিয়ে পান আকর্ষণীয় বোনাস! 🚀
+            </marquee>
+        </div>
+
+        <div class="status-card">
+            <p style="opacity:0.8; font-weight: bold;">মোট ব্যালেন্স</p>
+            <div class="balance-text" id="ui-bal">৳ ০.০০</div>
+            <div style="display: flex; justify-content: space-around; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                <div><small>সক্রিয় স্লট</small><br><b id="ui-active-plans" style="color:var(--green);">০</b></div>
+                <div><small>লকড ক্যাপিটাল</small><br><b id="ui-locked" style="color:var(--gold);">৳ ০.০০</b></div>
+            </div>
+        </div>
+
+        <div class="status-card" style="text-align: left; background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px dashed var(--accent); padding: 20px;">
+            <h4 style="color: var(--accent); margin-top: 0; display: flex; align-items: center; gap: 8px;">📢 অফিসিয়াল ঘোষণা</h4>
+            <p style="font-size: 13px; line-height: 1.6; opacity: 0.9; margin: 0;">
+                প্রিয় মেম্বার, আমাদের প্ল্যাটফর্মে নিরাপদ বিনিয়োগ করুন। প্রতিটি রেফারেলের জন্য আপনি পাবেন <b>১০০৳ বোনাস</b> (শর্ত প্রযোজ্য)। উইথড্র রিকোয়েস্ট দেওয়ার ১-৫ মিনিটের মধ্যে পেমেন্ট কমপ্লিট করা হয়। ধন্যবাদ।
+            </p>
+            <div style="font-size: 11px; color: var(--gold); text-align: right; margin-top: 10px; font-weight: bold;">— এডমিন প্যানেল (TP Farming)</div>
+        </div>
+
+        <h4 style="margin-left:10px; color:var(--accent); text-shadow: 1px 1px 2px #000;">আপনার সক্রিয় স্লট ও টাইমার</h4>
+        <div id="my-active-slots-list"></div>
+    </div>
+
+    <div id="view-refer" class="view" style="display:none;">
+        <div class="status-card">
+            <h3 style="color:var(--accent);">রেফারেল প্রোগ্রাম</h3>
+            <p style="font-size:13px;">প্রতিটি সফল রেফারেল (৩০০৳ স্লট বাই) এর জন্য পান ১০০৳ বোনাস!</p>
+            <div id="my-ref-link" style="background:rgba(0,0,0,0.3); padding:15px; border-radius:10px; border:1px solid var(--accent); color:var(--accent); font-size:12px; word-break:break-all; margin: 20px 0;">---</div>
+            <button class="btn btn-primary" onclick="copyRefLink()">লিংক কপি করুন</button>
+        </div>
+    </div>
+
+    <div id="view-slots" class="view" style="display:none;">
+        <h3 style="text-align:center; color:var(--accent); text-shadow: 1px 1px 5px #000;">বিনিয়োগ স্লট (দৈনিক ১৫%)</h3>
+        <div class="slot-grid" id="slot-list"></div>
+    </div>
+
+    <div id="view-wallet" class="view" style="display:none;">
+        <div style="display:flex; gap:10px; margin-bottom:20px;">
+            <button class="btn" style="background:var(--green); color:white; flex:1;" onclick="toggleWallet('dep')">ডিপোজিট</button>
+            <button class="btn" style="background:var(--red); color:white; flex:1;" onclick="toggleWallet('wit')">উইথড্র</button>
+        </div>
+        
+        <div id="wallet-dep" class="status-card">
+            <h3 style="color:var(--accent);">ডিপোজিট করুন</h3>
+            <select id="dep-method">
+                <option value="bKash">bKash</option>
+                <option value="Nagad">Nagad</option>
+                <option value="Rocket">Rocket</option>
+            </select>
+            <p>নম্বর: <b style="color:var(--gold);">01921790792</b></p>
+            <input type="number" id="dep-amt" placeholder="টাকার পরিমাণ (মিনিমাম ৩০০৳)">
+            <input type="text" id="dep-trx" placeholder="ট্রানজেকশন আইডি (TrxID)">
+            <button class="btn btn-primary" onclick="reqDeposit()">জমা দিন</button>
+        </div>
+
+        <div id="wallet-wit" class="status-card" style="display:none;">
+            <h3 style="color:var(--red);">উইথড্র করুন</h3>
+            <select id="wit-method">
+                <option value="bKash">bKash</option>
+                <option value="Nagad">Nagad</option>
+                <option value="Rocket">Rocket</option>
+            </select>
+            <input type="number" id="wit-amt" placeholder="টাকার পরিমাণ (১০০ - ২৫,০০০৳)">
+            <input type="number" id="wit-num" placeholder="ব্যক্তিগত নম্বর">
+            <button class="btn btn-primary" style="background:var(--red); color:white;" onclick="reqWithdraw()">উইথড্র করুন</button>
+        </div>
+
+        <div class="status-card">
+            <h4>লেনদেনের ইতিহাস</h4>
+            <div style="overflow-x:auto;"><table class="history-table"><tbody id="history-body"></tbody></table></div>
+        </div>
+    </div>
+
+    <div id="view-admin" class="view" style="display:none;">
+        <h2 style="text-align:center;">এডমিন কন্ট্রোল</h2>
+        <div id="admin-pending-area">
+            <h3>⏳ পেন্ডিং রিকোয়েস্ট</h3>
+            <div id="admin-list"></div>
+        </div>
+        <div id="admin-users-area" style="margin-top:30px;">
+            <h3>👥 ইউজার লিস্ট</h3>
+            <div id="admin-user-list"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let users = JSON.parse(localStorage.getItem('tp_sys_users')) || {};
+    let logs = JSON.parse(localStorage.getItem('tp_sys_logs')) || [];
+    let currentUser = "";
+
+    function sync() {
+        localStorage.setItem('tp_sys_users', JSON.stringify(users));
+        localStorage.setItem('tp_sys_logs', JSON.stringify(logs));
+        updateUI();
+    }
+
+    function showAuth(mode) {
+        document.getElementById('login-fields').style.display = mode === 'login' ? 'block' : 'none';
+        document.getElementById('reg-fields').style.display = mode === 'reg' ? 'block' : 'none';
+        document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+        document.getElementById('tab-reg').classList.toggle('active', mode === 'reg');
+    }
+
+    function processRegister() {
+        const ph = document.getElementById('r-phone').value;
+        const ps = document.getElementById('r-pass').value;
+        const rf = document.getElementById('r-ref').value || "tpxvg";
+        if(ph.length < 11 || ps.length < 4) return alert("সঠিক ফোন নম্বর ও পাসওয়ার্ড দিন।");
+        if(users[ph]) return alert("এই নম্বর দিয়ে আগে থেকেই অ্যাকাউন্ট আছে।");
+        users[ph] = { pass: ps, bal: 0, lock: 0, invs: [], refBy: rf, hasGotRefBonus: false };
+        sync(); alert("রেজিস্ট্রেশন সফল হয়েছে!"); showAuth('login');
+    }
+
+    function processLogin() {
+        const ph = document.getElementById('l-phone').value;
+        const ps = document.getElementById('l-pass').value;
+        if(users[ph] && users[ph].pass === ps) {
+            currentUser = ph;
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('app-main').style.display = 'block';
+            document.getElementById('top-nav').style.display = 'flex';
+            document.getElementById('my-ref-link').innerText = window.location.origin + window.location.pathname + "?ref=" + ph;
+            renderSlots(); startProfitWorker();
+        } else { alert("ফোন নম্বর অথবা পাসওয়ার্ড ভুল!"); }
+    }
+
+    function renderSlots() {
+        const list = document.getElementById('slot-list'); list.innerHTML = "";
+        for(let i = 300; i <= 25000; i += 100) {
+            list.innerHTML += `<div class="slot-card">
+                <img src="https://picsum.photos/seed/farm${i}/400/250" class="slot-img">
+                <h2 style="color:var(--accent);">৳ ${i}</h2>
+                <p>দৈনিক লাভ ১৫%: ৳ ${(i*0.15).toFixed(2)}</p>
+                <p style="font-size:12px; color:var(--gold);">লক পিরিয়ড: ৩০ দিন</p>
+                <button class="btn btn-primary" onclick="buySlot(${i})">বিনিয়োগ করুন</button>
+            </div>`;
+        }
+    }
+
+    function buySlot(amt) {
+        let u = users[currentUser];
+        if(u.bal >= amt) {
+            u.bal -= amt; u.lock += amt;
+            u.invs.push({ amt: amt, last: Date.now(), unlock: Date.now() + (30*24*60*60*1000), active: true });
+            if(amt >= 300 && u.refBy && !u.hasGotRefBonus) {
+                if(users[u.refBy]) { users[u.refBy].bal += 100; u.hasGotRefBonus = true; 
+                logs.push({ id: Date.now(), user: u.refBy, type: 'BONUS', amt: 100, info: `Ref: ${currentUser}`, status: 'app' }); }
+            }
+            sync(); alert("বিনিয়োগ সফল হয়েছে! আপনার ৩০ দিনের টাইমার শুরু হয়েছে।");
+        } else { alert("আপনার ব্যালেন্স পর্যাপ্ত নয়!"); }
+    }
+
+    function startProfitWorker() {
+        setInterval(() => {
+            let now = Date.now(); let changed = false;
+            for(let p in users) {
+                users[p].invs.forEach(inv => {
+                    if(inv.active) {
+                        if(now - inv.last >= 86400000) { 
+                            users[p].bal += (inv.amt * 0.15); 
+                            inv.last = now; 
+                            changed = true; 
+                        }
+                        if(now >= inv.unlock) { 
+                            users[p].bal += inv.amt; 
+                            users[p].lock -= inv.amt; 
+                            inv.active = false; 
+                            changed = true; 
+                        }
+                    }
+                });
+            }
+            if(changed) sync();
+            renderMyActiveSlots(); 
+            updateUI();
+        }, 1000);
+    }
+
+    function renderMyActiveSlots() {
+        const div = document.getElementById('my-active-slots-list');
+        let u = users[currentUser];
+        if(!u || !u.invs) return;
+
+        let activeInvs = u.invs.filter(i => i.active);
+        if(activeInvs.length === 0) {
+            div.innerHTML = "<p style='text-align:center; opacity:0.6;'>কোনো সক্রিয় স্লট নেই</p>";
+            return;
+        }
+
+        div.innerHTML = activeInvs.map(inv => {
+            let now = Date.now();
+            let nextProfitTime = 86400000 - (now - inv.last);
+            
+            let h = Math.floor(nextProfitTime/3600000);
+            let m = Math.floor((nextProfitTime%3600000)/60000);
+            let s = Math.floor((nextProfitTime%60000)/1000);
+            
+            let unlockDate = new Date(inv.unlock).toLocaleDateString('bn-BD');
+
+            return `<div class="status-card" style="padding:15px; margin-bottom:10px; border-left: 5px solid var(--accent); text-align:left;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <b style="color:var(--accent);">🚜 স্লট ৳${inv.amt}</b>
+                    <span style="font-size:11px; color:var(--gold);">৩০ দিন লক (শেষ: ${unlockDate})</span>
+                </div>
+                <div class="timer-box">
+                    <small style="opacity:0.8;">পরবর্তী ১৫% প্রফিট জমা হবে:</small><br>
+                    <b style="font-family:monospace; font-size:16px; color:var(--green);">${h} ঘণ্টা ${m} মিনিট ${s} সেকেন্ড</b>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function reqDeposit() {
+        const amt = parseInt(document.getElementById('dep-amt').value);
+        const trx = document.getElementById('dep-trx').value;
+        const method = document.getElementById('dep-method').value;
+        if(amt < 300 || !trx) return alert("সঠিক তথ্য দিন!");
+        logs.push({ id: Date.now(), user: currentUser, type: 'DEP', amt: amt, info: `${method} | Trx: ${trx}`, status: 'p' });
+        sync(); 
+        alert("আবেদন পাঠানো হয়েছে! দয়া করে ১ থেকে ৫ মিনিট অপেক্ষা করুন।");
+        document.getElementById('dep-amt').value = '';
+        document.getElementById('dep-trx').value = '';
+    }
+
+    function reqWithdraw() {
+        let u = users[currentUser];
+        const amt = parseInt(document.getElementById('wit-amt').value);
+        const num = document.getElementById('wit-num').value;
+        const method = document.getElementById('wit-method').value;
+        if(amt < 100 || amt > 25000) return alert("উইথড্র সীমা ১০০ - ২৫,০০০৳");
+        if(u.bal < amt) return alert("আপনার ব্যালেন্স পর্যাপ্ত নয়!");
+        if(num.length < 11) return alert("সঠিক নম্বর দিন!");
+        logs.push({ id: Date.now(), user: currentUser, type: 'WIT', amt: amt, info: `${method} | Num: ${num}`, status: 'p' });
+        sync(); alert("উইথড্র আবেদন সফল হয়েছে!");
+        document.getElementById('wit-amt').value = '';
+        document.getElementById('wit-num').value = '';
+    }
+
+    function updateUI() {
+        if(!currentUser) return;
+        let u = users[currentUser];
+        document.getElementById('ui-bal').innerText = "৳ " + u.bal.toFixed(2);
+        document.getElementById('ui-locked').innerText = "৳ " + u.lock.toFixed(2);
+        document.getElementById('ui-active-plans').innerText = u.invs.filter(i => i.active).length;
+        document.getElementById('history-body').innerHTML = logs.filter(l => l.user === currentUser).reverse().map(l => `
+            <tr><td>${l.type}</td><td>৳${l.amt}</td><td class="status-${l.status}">${l.status==='p'?'Pending':(l.status==='rej'?'Rejected':'Success')}</td></tr>
+        `).join('');
+    }
+
+    function goTo(id) { document.querySelectorAll('.view').forEach(v => v.style.display = 'none'); document.getElementById('view-' + id).style.display = 'block'; }
+    function adminLogin() { if(prompt("এডমিন পাসওয়ার্ড:") === "pops123") { goTo('admin'); renderAdmin(); } }
+    
+    function renderAdmin() {
+        document.getElementById('admin-list').innerHTML = logs.filter(l => l.status === 'p').map(l => `
+            <div style="background:#fff; color:#000; padding:15px; margin:10px; border-radius:10px;">
+                <b>${l.type}</b>: ${l.amt}৳ (${l.user})<br>Info: ${l.info}<br>
+                <button onclick="admAct(${l.id}, 'app')" style="background:green; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Approve</button> 
+                <button onclick="admAct(${l.id}, 'rej')" style="background:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Reject</button>
+            </div>
+        `).join('') || "<p>কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>";
+
+        let userTable = `<table class="admin-table"><tr><th>ফোন</th><th>ব্যালেন্স</th><th>স্লট</th></tr>`;
+        for(let ph in users) {
+            userTable += `<tr><td>${ph}</td><td>৳${users[ph].bal.toFixed(0)}</td><td>${users[ph].invs.filter(i=>i.active).length}</td></tr>`;
+        }
+        userTable += `</table>`;
+        document.getElementById('admin-user-list').innerHTML = userTable;
+    }
+
+    function admAct(id, act) {
+        let l = logs.find(x => x.id === id);
+        if(act === 'app') { if(l.type === 'DEP') users[l.user].bal += l.amt; if(l.type === 'WIT') users[l.user].bal -= l.amt; }
+        l.status = act; sync(); renderAdmin();
+    }
+    function copyRefLink() { navigator.clipboard.writeText(document.getElementById('my-ref-link').innerText); alert("রেফারেল লিংক কপি হয়েছে!"); }
+    function toggleWallet(m) { document.getElementById('wallet-dep').style.display=m==='dep'?'block':'none'; document.getElementById('wallet-wit').style.display=m==='wit'?'block':'none'; }
+    function processLogout() { location.reload(); }
+</script>
 </body>
-</html>
+        </html>
