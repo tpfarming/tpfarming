@@ -2,59 +2,14 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TP Farming - Premium Agro</title>
-    <style>
-        :root { --primary: #0f172a; --accent: #00f2ff; --gold: #f59e0b; --card: rgba(30, 41, 59, 0.9); --white: #ffffff; --green: #22c55e; --red: #ef4444; }
-        
-        body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            margin: 0; 
-            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), 
-                        url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=1500&q=80');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            color: var(--white); 
-            overflow-x: hidden; 
-        }
-        
-        #auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
-        .auth-card { background: rgba(30, 41, 59, 0.95); padding: 35px; border-radius: 30px; border: 1px solid var(--accent); width: 100%; max-width: 400px; text-align: center; backdrop-filter: blur(15px); box-shadow: 0 15px 50px rgba(0, 242, 255, 0.2); }
-        nav { background: rgba(30, 41, 59, 0.95); padding: 12px 5px; display: none; justify-content: space-around; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); }
-        .nav-link { color: var(--accent); font-weight: bold; cursor: pointer; font-size: 10px; text-transform: uppercase; text-align: center; }
-        .container { padding: 20px; max-width: 800px; margin: auto; }
-        .status-card { background: var(--card); border-radius: 25px; padding: 25px; text-align: center; border: 1px solid rgba(0,242,255,0.3); margin-bottom: 25px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .balance-text { font-size: 35px; color: var(--accent); font-weight: bold; margin: 10px 0; text-shadow: 0 0 10px rgba(0,242,255,0.5); }
-        .slot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .slot-card { background: var(--card); border-radius: 25px; padding: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); position: relative; backdrop-filter: blur(10px); }
-        .slot-img { width: 100%; height: 160px; border-radius: 20px; object-fit: cover; margin-bottom: 15px; }
-        .auth-tabs { display: flex; margin-bottom: 30px; background: rgba(0,0,0,0.4); border-radius: 15px; padding: 5px; }
-        .auth-tab { flex: 1; padding: 12px; cursor: pointer; border-radius: 12px; transition: 0.4s; font-weight: bold; color: #94a3b8; }
-        .auth-tab.active { background: var(--accent); color: #0f172a; }
-        input, select { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #334155; background: rgba(15, 23, 42, 0.8); color: white; box-sizing: border-box; outline: none; }
-        .btn { width: 100%; padding: 16px; border-radius: 15px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 16px; }
-        .btn-primary { background: var(--accent); color: #0f172a; box-shadow: 0 5px 15px rgba(0, 242, 255, 0.3); }
-        .history-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
-        .history-table th, .history-table td { border: 1px solid rgba(255,255,255,0.1); padding: 10px; text-align: center; }
-        .status-p { color: var(--gold); } .status-app { color: var(--green); }
-        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .admin-table { width: 100%; border-collapse: collapse; background: white; color: black; border-radius: 10px; overflow: hidden; margin-top: 10px; font-size: 13px;}
-        .admin-table th, .admin-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        .admin-table th { background: #f2f2f2; }
-        .timer-box { background: rgba(0,0,0,0.4); padding: 8px; border-radius: 10px; margin-top: 8px; border: 1px solid rgba(0,242,255,0.2); }
-    </style>
-</head>
+    <title>TP Farming</title>
+    </head>
 <body>
-
-<a href="https://wa.me/8801992840527" class="whatsapp-float" target="_blank">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30">
-</a>
-
-<div id="auth-screen">
-    <div class="auth-card">
-        <h1 style="color:var(--accent); margin:0; letter-spacing: 2px;">TP FARMING</h1>
-        <p style="font-size: 12px; color: var(--gold); margin-bottom: 20px;">Premium Agro Investment</p>
-        <div class="auth-tabs">
-            <div id="tab-login" class="auth-tab active" onclick="showAuth('login')">লগইন</div>
-            <div id="tab-reg" class="auth-tab" onclick="showAuth('reg')">রেজিস
+    <script>
+        // আপনার দেওয়া নির্দেশ অনুযায়ী ৩০০ টাকা থেকে স্লট এবং ১৫% ইনকাম সেট করা হয়েছে
+        const MIN_SLOT = 300; 
+        const DAILY_PROFIT = 0.15;
+        const REF_CODE = 'tpxvg';
+    </script>
+</body>
+</html>
